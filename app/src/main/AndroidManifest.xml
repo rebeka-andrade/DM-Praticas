@@ -11,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp">
         <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:label="WeatherApp"
+            android:theme="@style/Theme.WeatherApp" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:label="WeatherApp"
