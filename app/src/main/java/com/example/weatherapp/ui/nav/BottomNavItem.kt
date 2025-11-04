@@ -1,11 +1,13 @@
 package com.example.weatherapp.ui.nav
 
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable // em caso de erro
+
 sealed interface Route {
     @Serializable
     data object Home : Route
