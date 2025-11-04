@@ -58,9 +58,15 @@ fun ListPage(modifier: Modifier = Modifier,
             .padding(8.dp)
     ) {
         items(cityList, key = { it.name }) { city ->
-            CityItem(city = city, onClose = { viewModel.remove(city) },
+            CityItem(city = city, onClose = {
+                viewModel.remove(city)
+                Toast.makeText(activity, "${city.name} Removida!", Toast.LENGTH_LONG).show()
+                activity.startActivity(
+                    Intent(activity, MainActivity::class.java).setFlags(
+                        FLAG_ACTIVITY_SINGLE_TOP
+                    )) },
                 onClick = {
-                Toast.makeText(activity, "Selecionando Cidade!", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "${city.name} selecionada!", Toast.LENGTH_LONG).show()
                 activity.startActivity(
                     Intent(activity, MainActivity::class.java).setFlags(
                         FLAG_ACTIVITY_SINGLE_TOP
