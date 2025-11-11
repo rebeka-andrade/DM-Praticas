@@ -5,9 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.weatherapp.model.MainViewModel
-import com.example.weatherapp.ui.theme.HomePage
-import com.example.weatherapp.ui.theme.ListPage
-import com.example.weatherapp.ui.theme.MapPage
+import com.example.weatherapp.ui.HomePage
+import com.example.weatherapp.ui.ListPage
+import com.example.weatherapp.ui.MapPage
 
 @Composable
 fun MainNavHost(navController: NavHostController, mainViewModel: MainViewModel) {
