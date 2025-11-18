@@ -34,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat.enableEdgeToEdge
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 @Preview(showBackground = true)
 @Composable
@@ -85,12 +87,21 @@ fun RegisterPage(modifier: Modifier = Modifier) {
         Row(modifier = modifier) {
             Button(
                 onClick = {
-                    Toast.makeText(activity, "Registro OK!", Toast.LENGTH_LONG).show()
-                    activity.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
+                    Firebase.auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity) { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    activity,
+                                    "Registro OK!", Toast.LENGTH_LONG
+                                ).show()
+                                activity.finish()
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    "Registro FALHOU!", Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
                 },
                 enabled = (nome.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && passwordConfir.isNotEmpty()) && password == passwordConfir
             ) {
@@ -105,7 +116,8 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             Spacer(modifier = modifier.size(24.dp))
             Button(
                 onClick = {
-                    activity.finish() }
+                    activity.finish()
+                }
             ) {
                 Text("Sair")
             }
