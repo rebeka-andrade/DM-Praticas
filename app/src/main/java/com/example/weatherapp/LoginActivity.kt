@@ -92,11 +92,6 @@ fun LoginPage(modifier: Modifier = Modifier) {
                     Firebase.auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(activity) { task ->
                             if (task.isSuccessful) {
-                                activity.startActivity(
-                                    Intent(activity, MainActivity::class.java).setFlags(
-                                        FLAG_ACTIVITY_SINGLE_TOP
-                                    )
-                                )
                                 Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
                             } else {
                                 Toast.makeText(activity, "Login FALHOU!", Toast.LENGTH_LONG).show()
@@ -113,7 +108,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
             ) {
                 Text("Limpar")
             }
-            Spacer(modifier = modifier.size(14.dp))
+            Spacer(modifier = modifier.size(24.dp))
             Button(
                 onClick = {
                     //Toast.makeText(activity, "Cadastro OK!", Toast.LENGTH_LONG).show()
@@ -125,14 +120,15 @@ fun LoginPage(modifier: Modifier = Modifier) {
                 },
             ) {
                 Text("Cadastro")
-            }
+            }/*
+            Spacer(modifier = modifier.size(4.dp))
             Button(
                 onClick = {
                     activity.finish()
                 }
             ) {
                 Text("Sair")
-            }
+            }*/
         }
     }
 }
