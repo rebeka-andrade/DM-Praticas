@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.R.attr.name
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,6 +32,9 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.db.fb.FBDatabase
+import com.example.weatherapp.db.fb.toFBUser
+import com.example.weatherapp.model.User
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
@@ -105,6 +109,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                                     activity,
                                     "Registro OK!", Toast.LENGTH_LONG
                                 ).show()
+                                FBDatabase().register(User(nome, email).toFBUser())
                             } else {
                                 Toast.makeText(
                                     activity,

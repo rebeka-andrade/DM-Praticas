@@ -31,20 +31,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.weatherapp.db.fb.FBDatabase
+import com.example.weatherapp.model.MainViewModelFactory
 import com.example.weatherapp.ui.nav.Route
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val fbDB = remember { FBDatabase() }
+            val viewModel : MainViewModel = viewModel(
+                factory = MainViewModelFactory(fbDB)
+            )
             var showDialog by remember { mutableStateOf(false) }
-            val viewModel: MainViewModel by viewModels()
             val navController = rememberNavController()
             val currentRoute = navController.currentBackStackEntryAsState()
             val showButton = currentRoute.value?.destination?.hasRoute(Route.List::class) == true
@@ -60,7 +67,6 @@ class MainActivity : ComponentActivity() {
                     })
                 Scaffold(
                     topBar = {
-                        @OptIn(ExperimentalMaterial3Api::class)
                         TopAppBar(
                             title = {
                                 val name = viewModel.user?.name?:"[carregando...]"
