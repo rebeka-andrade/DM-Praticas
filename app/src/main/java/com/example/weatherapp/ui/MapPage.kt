@@ -24,9 +24,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun MapPage(modifier: Modifier = Modifier,
             viewModel: MainViewModel
 ) {
-    val recife = LatLng(-8.05, -34.9)
-    val caruaru = LatLng(-8.27, -35.98)
-    val joaopessoa = LatLng(-7.12, -34.84)
+    //val recife = LatLng(-8.05, -34.9)
+    //val caruaru = LatLng(-8.27, -35.98)
+    //val joaopessoa = LatLng(-7.12, -34.84)
     val camPosState = rememberCameraPositionState ()
 
     val context = LocalContext.current
@@ -39,9 +39,9 @@ fun MapPage(modifier: Modifier = Modifier,
     }
 
     GoogleMap (modifier = Modifier.fillMaxSize(), onMapClick = {
-        viewModel.add("Cidade@${it.latitude}:${it.longitude}", location = it) },
+        viewModel.addCity(location = it) },
         cameraPositionState = camPosState,
-        // <- parâmetros anteriores aqui
+
         properties = MapProperties(isMyLocationEnabled = hasLocationPermission),
         uiSettings = MapUiSettings(myLocationButtonEnabled = true)
     ) {
@@ -51,7 +51,7 @@ fun MapPage(modifier: Modifier = Modifier,
                     title = it.name, snippet = "${it.location}")
             }
         }
-
+/*
         Marker(
             state = MarkerState(position = recife),
             title = "Recife",
@@ -72,6 +72,6 @@ fun MapPage(modifier: Modifier = Modifier,
             snippet = "Marcador em JoaoPessoa",
             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
         )
-
+*/
     }
 }
