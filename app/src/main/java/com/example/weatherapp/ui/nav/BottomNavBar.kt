@@ -1,5 +1,7 @@
 package com.example.weatherapp.ui.nav
 
+import android.net.http.SslCertificate.restoreState
+import android.net.http.SslCertificate.saveState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -10,14 +12,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.weatherapp.model.MainViewModel
 
 @Composable
-fun BottomNavBar(navController: NavHostController, items : List<BottomNavItem>) {
+fun BottomNavBar(viewModel: MainViewModel, items : List<BottomNavItem>) {
     NavigationBar(
         contentColor = Color.Black
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination
         items.forEach { item ->
             NavigationBarItem (
                 icon = { Icon(imageVector = item.icon, contentDescription= item.title)},
@@ -26,24 +27,9 @@ fun BottomNavBar(navController: NavHostController, items : List<BottomNavItem>) 
 
                 alwaysShowLabel = true,
 
-                selected = currentRoute == item.route,
-
+                selected = viewModel.page == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-// Volta pilha de navegação até HomePage (startDest).
-                        navController.graph.startDestinationRoute?.let {
-
-                            popUpTo(it) {
-                                saveState = true
-                            }
-
-                            restoreState = true
-
-                        }
-
-                        launchSingleTop = true
-
-                    }
+                    viewModel.page = item.route
                 }
             )
         }
