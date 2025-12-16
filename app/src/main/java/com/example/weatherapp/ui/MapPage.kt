@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.example.weatherapp.model.MainViewModel
+import com.example.weatherapp.model.Weather
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -24,9 +25,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun MapPage(modifier: Modifier = Modifier,
             viewModel: MainViewModel
 ) {
-    //val recife = LatLng(-8.05, -34.9)
-    //val caruaru = LatLng(-8.27, -35.98)
-    //val joaopessoa = LatLng(-7.12, -34.84)
     val camPosState = rememberCameraPositionState ()
 
     val context = LocalContext.current
@@ -41,16 +39,26 @@ fun MapPage(modifier: Modifier = Modifier,
     GoogleMap (modifier = Modifier.fillMaxSize(), onMapClick = {
         viewModel.addCity(location = it) },
         cameraPositionState = camPosState,
-
         properties = MapProperties(isMyLocationEnabled = hasLocationPermission),
         uiSettings = MapUiSettings(myLocationButtonEnabled = true)
     ) {
         viewModel.cities.forEach {
             if (it.location != null) {
-                Marker( state = MarkerState(position = it.location),
-                    title = it.name, snippet = "${it.location}")
+                val weather = viewModel.weather(it.name)
+                val desc = if (weather == Weather.LOADING) "Carregando clima..."
+                else weather.desc
+                Marker( state = MarkerState(position = it.location!!),
+                    title = it.name, snippet = desc
+                )
             }
         }
+    }
+}
+
+//val recife = LatLng(-8.05, -34.9)
+//val caruaru = LatLng(-8.27, -35.98)
+//val joaopessoa = LatLng(-7.12, -34.84)
+
 /*
         Marker(
             state = MarkerState(position = recife),
@@ -73,5 +81,3 @@ fun MapPage(modifier: Modifier = Modifier,
             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
         )
 */
-    }
-}
