@@ -120,3 +120,4 @@ class MainViewModelFactory(private val db : FBDatabase, private val service : We
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+
