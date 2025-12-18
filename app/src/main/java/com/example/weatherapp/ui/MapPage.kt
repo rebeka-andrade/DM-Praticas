@@ -64,6 +64,7 @@ fun MapPage(modifier: Modifier = Modifier,
     }
 }
 
+
 //val recife = LatLng(-8.05, -34.9)
 //val caruaru = LatLng(-8.27, -35.98)
 //val joaopessoa = LatLng(-7.12, -34.84)
