@@ -5,6 +5,7 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.firestore
+import kotlin.jvm.java
 
 class FBDatabase {
     interface Listener {
@@ -79,5 +80,14 @@ class FBDatabase {
         val uid = auth.currentUser!!.uid
         db.collection("users").document(uid).collection("cities")
             .document(city.name!!).delete()
+    }
+
+    fun update(city: FBCity) {
+        if (auth.currentUser == null) throw RuntimeException("Not logged in!")
+        val uid = auth.currentUser!!.uid
+        val changes = mapOf("lat" to city.lat,"lng" to city.lng,
+            "monitored" to city.monitored )
+        db.collection("users").document(uid)
+            .collection("cities").document(city.name!!).update(changes)
     }
 }

@@ -16,6 +16,7 @@ import com.example.weatherapp.db.fb.FBUser
 import com.example.weatherapp.db.fb.toFBCity
 import com.example.weatherapp.ui.nav.Route
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseUser
 
 class MainViewModel (private val db: FBDatabase, private val service : WeatherService): ViewModel(), FBDatabase.Listener {
 
@@ -119,6 +120,13 @@ class MainViewModel (private val db: FBDatabase, private val service : WeatherSe
         //TODO("Not yet implemented")
     }
 
+    fun update(city: City) {
+        db.update(city.toFBCity())
+    }
+
+    val cityMap: Map<String, City>
+        get() = _cities.toMap()
+
 }
 
 class MainViewModelFactory(private val db : FBDatabase, private val service : WeatherService) :
@@ -130,4 +138,3 @@ class MainViewModelFactory(private val db : FBDatabase, private val service : We
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-

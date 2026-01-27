@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,19 +50,43 @@ fun HomePage(viewModel: MainViewModel) {
                 )
             }
         } else {
+            val city = viewModel.cityMap[viewModel.city]
+
+            val icon =
+                if (city?.isMonitored == true)
+                    Icons.Filled.Notifications
+                else
+                    Icons.Outlined.Notifications
+
             Row {
                 AsyncImage( // Substitui o Icon
                     model = viewModel.weather(viewModel.city!!).imgUrl,
                     modifier = Modifier.size(140.dp),
-                    error = painterResource(id = R.drawable.carregando ),
+                    error = painterResource(id = R.drawable.carregando),
                     contentDescription = "Imagem"
                 )
                 Column {
                     Spacer(modifier = Modifier.size(12.dp))
-                    Text(
-                        text = viewModel.city ?: "Selecione uma cidade...",
-                        fontSize = 28.sp
-                    )
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = viewModel.city ?: "Selecione uma cidade...",
+                            fontSize = 28.sp
+                        )
+
+                        Spacer(modifier = Modifier.size(8.dp))
+
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = "Monitorada?",
+                            modifier = Modifier.size(32.dp).clickable {
+                                viewModel.update(
+                                    city = city!!.copy(isMonitored = !city.isMonitored)
+                                )
+                            }
+                        )
+                    }
+
                     viewModel.city?.let { name ->
                         val weather = viewModel.weather(name)
                         Spacer(modifier = Modifier.size(12.dp))
@@ -76,6 +102,7 @@ fun HomePage(viewModel: MainViewModel) {
                     }
                 }
             }
+
             viewModel.forecast(viewModel.city!!)?.let { forecasts ->
                 LazyColumn {
                     items(items = forecasts) { forecast ->
