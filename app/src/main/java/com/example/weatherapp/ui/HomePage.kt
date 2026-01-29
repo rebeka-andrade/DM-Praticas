@@ -102,7 +102,6 @@ fun HomePage(viewModel: MainViewModel) {
                     }
                 }
             }
-
             viewModel.forecast(viewModel.city!!)?.let { forecasts ->
                 LazyColumn {
                     items(items = forecasts) { forecast ->
