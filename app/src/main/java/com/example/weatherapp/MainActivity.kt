@@ -46,6 +46,8 @@ import com.example.weatherapp.ui.nav.Route
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import androidx.core.util.Consumer
+import com.example.weatherapp.db.local.LocalDatabase
+import com.example.weatherapp.repo.Repository
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -53,11 +55,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val uid = Firebase.auth.currentUser!!.uid
             val fbDB = remember { FBDatabase() }
+            val localDB = remember {
+                LocalDatabase(
+                    context = this,
+                    databaseName = "weather_local_db_$uid"
+                )
+            }
+            val repository = remember {
+                Repository(
+                    fbDB, localDB
+                )
+            }
             val weatherService = remember { WeatherService(this) }
             val forecastMonitor = remember { ForecastMonitor(this) }
             val viewModel : MainViewModel = viewModel(
-                factory = MainViewModelFactory(fbDB, weatherService, forecastMonitor)
+                factory = MainViewModelFactory(repository, weatherService, forecastMonitor)
             )
             var showDialog by remember { mutableStateOf(false) }
             val navController = rememberNavController()

@@ -56,10 +56,7 @@ fun ListPage(modifier: Modifier = Modifier,
             }, onClose = {
                     viewModel.remove(city)
                     Toast.makeText(activity, "${city.name} Removida!", Toast.LENGTH_LONG).show()
-                    activity.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            FLAG_ACTIVITY_SINGLE_TOP
-                        )) })
+                     })
         }
     }
 }
