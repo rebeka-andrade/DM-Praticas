@@ -26,6 +26,7 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.flow.forEach
 
 @Composable
 fun MapPage(modifier: Modifier = Modifier,
@@ -52,45 +53,27 @@ fun MapPage(modifier: Modifier = Modifier,
         val weathers = viewModel.weather.collectAsStateWithLifecycle(emptyMap()).value
 
         cities.values.forEach {
-            if (it.location != null) {
-                val weather = weathers[it.name]?:Weather.LOADING
+        if (it.location != null) {
+            val weather = weathers[it.name]?:Weather.LOADING
 
-                LaunchedEffect(it.name) {
-                    viewModel.loadWeather(it.name)
-                }
+            LaunchedEffect(it.name) {
+                viewModel.loadWeather(it.name)
+            }
 
-                LaunchedEffect(weather) {
-                    viewModel.loadBitmap(it.name)
-                }
-        }
+            LaunchedEffect(weather) {
+                viewModel.loadBitmap(it.name)
+            }
+                val image = weather.bitmap ?:
+                getDrawable(context, R.drawable.carregando)!!.toBitmap()
+                val marker = BitmapDescriptorFactory
+                    .fromBitmap(image.scale(120,120))
+                val desc = if (weather == Weather.LOADING) "Carregando clima..."
+                else weather.desc
+                Marker( state = MarkerState(position = it.location!!),
+                    icon = marker,
+                    title = it.name, snippet = desc
+                )
+            }
         }
     }
 }
-
-
-//val recife = LatLng(-8.05, -34.9)
-//val caruaru = LatLng(-8.27, -35.98)
-//val joaopessoa = LatLng(-7.12, -34.84)
-
-/*
-        Marker(
-            state = MarkerState(position = recife),
-            title = "Recife",
-            snippet = "Marcador em Recife",
-            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
-        )
-
-        Marker(
-            state = MarkerState(position = caruaru),
-            title = "Caruaru",
-            snippet = "Marcador em Caruaru",
-            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)
-        )
-
-        Marker(
-            state = MarkerState(position = joaopessoa),
-            title = "JoaoPessoa",
-            snippet = "Marcador em JoaoPessoa",
-            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
-        )
-*/
